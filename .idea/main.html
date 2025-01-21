@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preparação APROG</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #question {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: normal;
+      text-align: left;
+      display: inline-block;
+      text-align: justify;
+      max-width: 800px;
+      white-space: pre-wrap;
+    }
+    .button-container {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border: 2px black;
+      background-color: lightslategray;
+      color: white;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+<h1>Random Question Picker</h1>
+<p>Para além dos requerimentos, implemente o método main em todos os exercícios</p>
+<div id="question"></div>
+<div class="button-container">
+  <button onclick="pickRandomQuestion()">Get Random Question</button>
+</div>
+
+<script>
+  // Array of questions
+  const questions = [
+    `1. Gestão de Movimentos Bancários
+Uma instituição bancária guarda num ficheiro de texto, para cada conta, o histórico de movimentos dessa conta ao longo das 52 semanas do ano. Implemente os métodos:
+
+- readInformationFromFile: Lê os movimentos e organiza em estruturas de dados.
+- showExtractByWeek: Exibe o saldo semanal e a média anual.
+- howManyWeeksWithBalanceLessThanValue: Conta semanas com saldo abaixo de um valor.
+- isItPossibleToWithdrawThisAmount: Verifica se é possível efetuar um levantamento.`,
+
+    `2. Estatísticas de Jogos de Xadrez
+Um clube de xadrez regista resultados semestrais de jogos realizados (vitórias, empates e derrotas). Implemente os métodos:
+
+- readInformationFromFile: Lê os resultados mensais de um ficheiro.
+- getTheMostVictoriousMonth: Determina o mês com maior percentual de vitórias.
+- getAverages: Calcula médias de jogos realizados.
+- writeStatistics: Exibe relatórios com as estatísticas.`,
+
+    `3. Plataforma de Streaming de Música
+Uma plataforma armazena informações de músicas (nome, duração e custo). Implemente os métodos:
+
+- findMostExpensiveMusic: Identifica a música mais cara.
+- sort: Ordena músicas por duração.
+- calculateBiggestDifference: Calcula a maior diferença de duração entre músicas.
+- writeToFile: Salva os dados organizados num ficheiro.`,
+
+    `4. Gestão de Pistas de Aeroporto
+Um aeroporto regista os voos que chegam e partem em 3 pistas ao longo de 24 horas. Implemente os métodos:
+
+- readFlightsFromFile: Lê os dados dos voos de um ficheiro.
+- getAirstripBusiest: Determina a pista mais movimentada.
+- getAllAirstripFlights: Calcula o total de voos por pista.
+- writeStatistics: Calcula médias e exibe as estatísticas.`,
+
+    `5. Monitorização de Temperaturas
+Um sistema monitoriza a temperatura de 10 cidades em intervalos de 3 horas durante o dia. Implemente os métodos:
+
+- countSingleTemperatures: Conta valores únicos na matriz.
+- getHowManySingleTemperaturesPerLine: Conta valores únicos por linha.
+- printThermalHoles: Identifica "buracos térmicos".
+- saveLinesWithoutSingleTemperatures: Salva linhas sem repetições num ficheiro.`,
+
+    `6. Distribuição de Alunos em Salas
+Uma escola organiza alunos numa sala de exame com 7 filas e 10 lugares por fila. Implemente os métodos:
+
+- lerInformacaoDoFicheiro: Lê dados dos alunos de um ficheiro.
+- obterDistribuicaoDosAlunos: Distribui os alunos pelas mesas.
+- obterQuantidadeDeAlunosPorTurma: Conta o número de alunos por turma.`,
+
+    `7. Resultados de Corridas
+Uma empresa organiza corridas de carros e regista as classificações de 8 pilotos por corrida. Implemente os métodos:
+
+- saoClassificacoesCorretas: Valida as classificações.
+- obterPontuacaoTotalDosPilotos: Calcula a pontuação total de cada piloto.
+- mostrarPilotosEmPrimeiroLugar: Exibe os pilotos com a maior pontuação.`,
+
+    `8. Gestão de Inventário de Loja
+Uma loja deseja implementar um programa para organizar o inventário de produtos. Cada produto possui: nome, código único, categoria e quantidade em stock. Implemente os métodos:
+
+- lerInventarioDoFicheiro: Lê os produtos de um ficheiro e organiza os dados.
+- obterProdutosPorCategoria: Conta o número de produtos em cada categoria.
+- atualizarStockProduto: Atualiza o stock de um produto.`,
+
+    `9. Distribuição de Cadeiras em Um Auditório
+Um auditório possui 20 filas, cada uma com 15 lugares. Implemente os métodos:
+
+- lerParticipantesDeFicheiro: Lê os dados dos participantes e distribui pelas filas.
+- contarLugaresLivres: Retorna o número de lugares disponíveis.
+- obterEventoMaisPopular: Determina o evento com mais participantes.`,
+
+    `10. Análise de Resultados de Exames
+Uma escola organiza exames para diferentes disciplinas e deseja calcular estatísticas. Implemente os métodos:
+
+- lerResultadosDeFicheiro: Lê as notas dos alunos.
+- calcularMediaPorDisciplina: Calcula a média das notas por disciplina.
+- obterAlunosComNotasAbaixoDaMedia: Lista os alunos com média abaixo de 9.5.`,
+
+    `11. Análise de Consumo de Energia
+Uma empresa de energia regista o consumo de 10 clientes durante os 12 meses do ano. Cada cliente tem um ID, e o consumo é registado em kWh. Implemente os métodos:
+
+- readEnergyDataFromFile: Lê os dados de consumo de um ficheiro.
+- getMonthlyConsumptionStats: Calcula estatísticas mensais de consumo.
+- findClientWithHighestAnnualConsumption: Determina o cliente com maior consumo anual.
+- saveAnnualSummaryToFile: Salva um resumo anual num ficheiro.`,
+
+    `12. Gestão de Aluguer de Bicicletas
+Uma empresa regista o aluguer de bicicletas para diferentes tipos de clientes (diário, semanal, mensal). Implemente os métodos:
+
+- readRentalDataFromFile: Lê os dados de alugueres de um ficheiro.
+- calculateTotalRevenuePerType: Calcula a receita por tipo de cliente.
+- getMostProfitableRentalType: Determina o tipo de cliente mais lucrativo.
+- saveSummaryToFile: Salva um resumo num ficheiro.`,
+
+    `13. Gestão de Resultados de Corridas de Bicicleta
+Um clube de ciclismo regista os tempos de chegada dos participantes em 5 provas ao longo do ano. Implemente os métodos:
+
+- readRaceResultsFromFile: Lê os dados das corridas de um ficheiro.
+- getAverageTimePerRace: Retorna os tempos médios de cada prova.
+- findFastestRacer: Determina o participante mais rápido.
+- generateRanking: Gera um ranking com base nos tempos.`,
+
+    `14. Monitorização de Estações Meteorológicas
+Um sistema monitoriza a temperatura de 10 cidades em intervalos de 3 horas, durante 24 horas. Implemente os métodos:
+
+- readTemperaturesFromFile: Lê os dados das temperaturas de um ficheiro.
+- getDailyTemperatureStats: Calcula estatísticas diárias.
+- findCityWithHighestVariation: Determina a cidade com maior variação de temperatura.
+- saveTemperatureDataToFile: Salva as estatísticas num ficheiro.`,
+
+    `15. Gestão de Reservas de Cinema
+Um cinema deseja organizar as reservas de lugares para os seus filmes em diferentes horários. Implemente os métodos:
+
+- readReservationsFromFile: Lê os dados de reservas de um ficheiro.
+- countEmptySeatsPerMovie: Conta os lugares vagos por filme.
+- getMostPopularMovie: Determina o filme mais popular.
+- isSeatAvailable: Verifica se um lugar está disponível.`
+  ];
+
+  // Function to pick a random question
+  function pickRandomQuestion() {
+    const randomIndex = Math.floor(Math.random() * questions.length);
+    const randomQuestion = questions[randomIndex];
+    document.getElementById('question').textContent = randomQuestion;
+  }
+</script>
+</body>
+</html>
